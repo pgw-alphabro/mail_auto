@@ -397,8 +397,5 @@ def send_emails():
     except Exception as e:
         return jsonify({'success': False, 'error': f'이메일 발송 중 오류: {str(e)}'})
 
-# Export the Flask app for Vercel
-app = app
-
 if __name__ == '__main__':
     app.run(debug=True)
