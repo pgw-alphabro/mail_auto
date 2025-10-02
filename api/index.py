@@ -345,15 +345,22 @@ HTML_TEMPLATE = """
                 📥 샘플 파일 다운로드
             </button>
             
-            <h3 style="margin-top: 30px;">🔐 앱 비밀번호 생성</h3>
+            <h3 style="margin-top: 30px;">🔐 메일 서비스별 설정</h3>
             <div style="background: #fff3cd; border: 1px solid #fbbf24; border-radius: 6px; padding: 12px; font-size: 0.85rem;">
-                <p style="margin: 0 0 8px 0; font-weight: 600;">Gmail 앱 비밀번호 생성 방법:</p>
-                <ol style="margin: 0; padding-left: 16px;">
+                <p style="margin: 0 0 8px 0; font-weight: 600;">📧 Gmail 사용시:</p>
+                <ol style="margin: 0 0 12px 16px; padding: 0;">
                     <li>Google 계정 관리 접속</li>
                     <li>보안 → 2단계 인증 활성화</li>
                     <li>앱 비밀번호 → 메일 선택</li>
-                    <li>16자리 코드 복사</li>
+                    <li>16자리 코드 사용</li>
                 </ol>
+                
+                <p style="margin: 0 0 8px 0; font-weight: 600;">🏢 하이웍스 메일 사용시:</p>
+                <ul style="margin: 0; padding-left: 16px;">
+                    <li>하이웍스 계정 비밀번호 직접 사용</li>
+                    <li>자동으로 SMTP 서버 감지</li>
+                    <li>별도 앱 비밀번호 불필요</li>
+                </ul>
             </div>
         </div>
 
@@ -386,10 +393,10 @@ HTML_TEMPLATE = """
                     <input type="email" id="sender_email" placeholder="example@gmail.com" required>
                 </div>
                 <div class="form-group">
-                    <label for="sender_password">앱 비밀번호</label>
-                    <input type="password" id="sender_password" placeholder="Gmail 앱 비밀번호 (16자리)" required>
+                    <label for="sender_password">비밀번호</label>
+                    <input type="password" id="sender_password" placeholder="Gmail: 앱 비밀번호 / 하이웍스: 계정 비밀번호" required>
                     <small style="color: #6b7280; margin-top: 5px; display: block;">
-                        💡 Gmail 2단계 인증 → 앱 비밀번호에서 생성 (예: abcd efgh ijkl mnop)
+                        💡 Gmail: 16자리 앱 비밀번호 | 하이웍스: 일반 계정 비밀번호
                     </small>
                 </div>
             </div>
@@ -663,13 +670,73 @@ def send_emails():
         if '@' not in sender_email:
             return jsonify({'success': False, 'error': '올바른 이메일 주소를 입력해주세요.'})
         
-        # SMTP 서버 연결
-        smtp_server = 'smtp.gmail.com'
-        smtp_port = 587
+        # SMTP 서버 설정 함수
+        def get_smtp_settings(email):
+            domain = email.split('@')[1].lower()
+            
+            if 'gmail.com' in domain:
+                return {
+                    'server': 'smtp.gmail.com',
+                    'port': 587,
+                    'use_tls': True,
+                    'use_ssl': False
+                }
+            elif 'hiworks.com' in domain or domain.endswith('.hiworks.com'):
+                return {
+                    'server': 'smtp.hiworks.com',
+                    'port': 465,
+                    'use_tls': False,
+                    'use_ssl': True
+                }
+            elif 'naver.com' in domain:
+                return {
+                    'server': 'smtp.naver.com',
+                    'port': 465,
+                    'use_tls': False,
+                    'use_ssl': True
+                }
+            elif 'daum.net' in domain or 'kakao.com' in domain:
+                return {
+                    'server': 'smtp.daum.net',
+                    'port': 465,
+                    'use_tls': False,
+                    'use_ssl': True
+                }
+            elif 'outlook.com' in domain or 'hotmail.com' in domain:
+                return {
+                    'server': 'smtp.live.com',
+                    'port': 587,
+                    'use_tls': True,
+                    'use_ssl': False
+                }
+            else:
+                # 기본값 (Gmail 설정)
+                return {
+                    'server': 'smtp.gmail.com',
+                    'port': 587,
+                    'use_tls': True,
+                    'use_ssl': False
+                }
         
-        server = smtplib.SMTP(smtp_server, smtp_port)
-        server.starttls()
-        server.login(sender_email, sender_password)
+        # SMTP 설정 가져오기
+        smtp_settings = get_smtp_settings(sender_email)
+        
+        # SMTP 서버 연결
+        try:
+            if smtp_settings['use_ssl']:
+                server = smtplib.SMTP_SSL(smtp_settings['server'], smtp_settings['port'])
+            else:
+                server = smtplib.SMTP(smtp_settings['server'], smtp_settings['port'])
+                if smtp_settings['use_tls']:
+                    server.starttls()
+            
+            server.login(sender_email, sender_password)
+        except smtplib.SMTPAuthenticationError:
+            return jsonify({'success': False, 'error': 'SMTP 인증 실패: 이메일 주소와 비밀번호를 확인해주세요.'})
+        except smtplib.SMTPConnectError:
+            return jsonify({'success': False, 'error': 'SMTP 서버 연결 실패: 네트워크 연결을 확인해주세요.'})
+        except Exception as e:
+            return jsonify({'success': False, 'error': f'SMTP 연결 오류: {str(e)}'})
         
         sent_count = 0
         
