@@ -356,11 +356,17 @@ HTML_TEMPLATE = """
                 </ol>
                 
                 <p style="margin: 0 0 8px 0; font-weight: 600;">🏢 하이웍스 메일 사용시:</p>
-                <ul style="margin: 0; padding-left: 16px;">
-                    <li>하이웍스 계정 비밀번호 직접 사용</li>
-                    <li>자동으로 SMTP 서버 감지</li>
-                    <li>별도 앱 비밀번호 불필요</li>
-                </ul>
+                <ol style="margin: 0 0 12px 16px; padding: 0;">
+                    <li>하이웍스 관리자 페이지 접속</li>
+                    <li>메일 → 보안 설정</li>
+                    <li>SMTP 외부 발송 허용</li>
+                    <li>앱 비밀번호 생성 (있는 경우)</li>
+                    <li>또는 일반 비밀번호 사용</li>
+                </ol>
+                
+                <p style="margin: 0; font-size: 0.8rem; color: #dc2626; font-weight: 600;">
+                    ⚠️ "로그인 실패" 오류 시 관리자에게 SMTP 발송 권한 요청
+                </p>
             </div>
         </div>
 
@@ -394,9 +400,9 @@ HTML_TEMPLATE = """
                 </div>
                 <div class="form-group">
                     <label for="sender_password">비밀번호</label>
-                    <input type="password" id="sender_password" placeholder="Gmail: 앱 비밀번호 / 하이웍스: 계정 비밀번호" required>
+                    <input type="password" id="sender_password" placeholder="Gmail: 16자리 앱 비밀번호 / 하이웍스: 앱 비밀번호 또는 계정 비밀번호" required>
                     <small style="color: #6b7280; margin-top: 5px; display: block;">
-                        💡 Gmail: 16자리 앱 비밀번호 | 하이웍스: 일반 계정 비밀번호
+                        💡 Gmail: 16자리 앱 비밀번호 필수 | 하이웍스: 앱 비밀번호 권장 (관리자 설정 필요)
                     </small>
                 </div>
             </div>
@@ -731,8 +737,18 @@ def send_emails():
                     server.starttls()
             
             server.login(sender_email, sender_password)
-        except smtplib.SMTPAuthenticationError:
-            return jsonify({'success': False, 'error': 'SMTP 인증 실패: 이메일 주소와 비밀번호를 확인해주세요.'})
+        except smtplib.SMTPAuthenticationError as e:
+            error_msg = str(e)
+            if 'hiworks.com' in sender_email.lower():
+                return jsonify({
+                    'success': False, 
+                    'error': 'SMTP 인증 실패 (하이웍스): 관리자에게 SMTP 외부 발송 권한 요청이 필요하거나, 앱 비밀번호를 생성해서 사용해야 합니다.'
+                })
+            else:
+                return jsonify({
+                    'success': False, 
+                    'error': 'SMTP 인증 실패: 이메일 주소와 비밀번호를 확인해주세요. Gmail의 경우 16자리 앱 비밀번호를 사용해야 합니다.'
+                })
         except smtplib.SMTPConnectError:
             return jsonify({'success': False, 'error': 'SMTP 서버 연결 실패: 네트워크 연결을 확인해주세요.'})
         except Exception as e:
