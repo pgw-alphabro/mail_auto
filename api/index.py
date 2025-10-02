@@ -353,11 +353,13 @@ HTML_TEMPLATE = """
                     <li>보안 → 2단계 인증 활성화</li>
                     <li>앱 비밀번호 → 메일 선택</li>
                     <li>16자리 코드 사용</li>
+                    <li>EX)송신자 이메일: mvptest.kr@gmail.com</li>
+                    <li>비밀번호: tyft tvur rkwg uics</li>
                 </ol>
                 
                 <p style="margin: 0 0 8px 0; font-weight: 600;">🏢 하이웍스 메일 사용시:</p>
                 <ol style="margin: 0 0 12px 16px; padding: 0;">
-                    <li>하이웍스 관리자 페이지 접속</li>
+                    <li>하이웍스 페이지 접속</li>
                     <li>메일 → 보안 설정</li>
                     <li>SMTP 외부 발송 허용</li>
                     <li>앱 비밀번호 생성 (있는 경우)</li>
