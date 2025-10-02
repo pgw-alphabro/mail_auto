@@ -394,14 +394,14 @@ HTML_TEMPLATE = """
             
             <div style="background: #ffebee; border: 1px solid #f44336; border-radius: 6px; padding: 8px;">
                 <p style="margin: 0; font-size: 0.8rem; color: #c62828; font-weight: 600;">
-                    ⚠️ "로그인 실패" 오류 시 관리자에게 SMTP 발송 권한 요청
+                    ⚠️ "로그인 실패" 오류 시 관리자(인텔리)에게 말씀해주세요!
                 </p>
             </div>
         </div>
 
         <!-- 메인 컨텐츠 -->
         <div class="container">
-            <h1>📧 대량 메일 발송</h1>
+            <h1>📧 데본 대량 메일 발송기</h1>
             
             <div class="info-box">
                 <h3 style="margin-bottom: 15px; color: #2b6cb0;">📋 사용 방법</h3>
