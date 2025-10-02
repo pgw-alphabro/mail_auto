@@ -47,7 +47,7 @@ HTML_TEMPLATE = """
         
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #f8f9fa;
             min-height: 100vh;
             padding: 20px;
         }
@@ -62,34 +62,32 @@ HTML_TEMPLATE = """
         }
         
         .sidebar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            background: white;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             height: fit-content;
             position: sticky;
             top: 20px;
         }
         
         .container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            background: white;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
         
         h1 {
-            color: #2d3748;
+            color: #1a202c;
             text-align: center;
-            margin-bottom: 40px;
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-bottom: 32px;
+            font-size: 2rem;
+            font-weight: 600;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 16px;
         }
         
         .sidebar h3 {
@@ -103,11 +101,11 @@ HTML_TEMPLATE = """
         }
         
         .form-section {
-            background: #f8fafc;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border: 1px solid #e2e8f0;
+            background: #fafbfc;
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid #d0d7de;
         }
         
         .form-section h3 {
@@ -134,18 +132,18 @@ HTML_TEMPLATE = """
         
         input[type="text"], textarea, input[type="file"] {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
+            padding: 10px 12px;
+            border: 1px solid #d0d7de;
+            border-radius: 4px;
             font-size: 14px;
-            transition: all 0.3s ease;
+            transition: border-color 0.2s ease;
             background: white;
         }
         
         input[type="text"]:focus, textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #0969da;
+            box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.1);
         }
         
         textarea {
@@ -163,47 +161,43 @@ HTML_TEMPLATE = """
         }
         
         button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #0969da;
             color: white;
-            padding: 14px 28px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 10px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 15px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
         }
         
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            background-color: #0860ca;
         }
         
         .btn-success {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+            background-color: #1a7f37;
         }
         
         .btn-success:hover {
-            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+            background-color: #116329;
         }
         
         .btn-preview {
-            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
-            box-shadow: 0 4px 15px rgba(237, 137, 54, 0.3);
+            background-color: #bf8700;
         }
         
         .btn-preview:hover {
-            box-shadow: 0 8px 25px rgba(237, 137, 54, 0.4);
+            background-color: #9a6700;
         }
         .info-box {
-            background: linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%);
-            border: 1px solid #90cdf4;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 25px 0;
-            box-shadow: 0 4px 15px rgba(144, 205, 244, 0.2);
+            background-color: #dbeafe;
+            border: 1px solid #93c5fd;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 20px 0;
+            border-left: 4px solid #3b82f6;
         }
         
         .info-box ul {
@@ -216,13 +210,12 @@ HTML_TEMPLATE = """
         }
         
         .preview-box {
-            background: #f7fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 25px 0;
+            background: #f6f8fa;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
             display: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
         
         .preview-box h3 {
@@ -232,33 +225,33 @@ HTML_TEMPLATE = """
         }
         
         .error {
-            color: #c53030;
-            background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
-            border: 1px solid #fc8181;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            font-weight: 500;
+            color: #d1242f;
+            background-color: #ffebe9;
+            border: 1px solid #fd2d20;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 12px 0;
+            border-left: 4px solid #d1242f;
         }
         
         .success {
-            color: #22543d;
-            background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
-            border: 1px solid #68d391;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            font-weight: 500;
+            color: #1a7f37;
+            background-color: #dcfce7;
+            border: 1px solid #22c55e;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 12px 0;
+            border-left: 4px solid #1a7f37;
         }
         
         .warning {
-            color: #744210;
-            background: linear-gradient(135deg, #fefcbf 0%, #faf089 100%);
-            border: 1px solid #f6e05e;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            font-weight: 500;
+            color: #9a6700;
+            background-color: #fff8c5;
+            border: 1px solid #fbbf24;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 12px 0;
+            border-left: 4px solid #9a6700;
         }
         
         table {
@@ -291,17 +284,17 @@ HTML_TEMPLATE = """
         }
         
         .file-upload-area {
-            border: 2px dashed #cbd5e0;
-            border-radius: 15px;
-            padding: 30px;
+            border: 2px dashed #d0d7de;
+            border-radius: 6px;
+            padding: 24px;
             text-align: center;
-            transition: all 0.3s ease;
-            background: #f7fafc;
+            transition: border-color 0.2s ease;
+            background: #f6f8fa;
         }
         
         .file-upload-area:hover {
-            border-color: #667eea;
-            background: #edf2f7;
+            border-color: #0969da;
+            background: #f1f3f4;
         }
         
         .format-table {
