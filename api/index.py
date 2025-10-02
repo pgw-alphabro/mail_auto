@@ -346,27 +346,54 @@ HTML_TEMPLATE = """
             </button>
             
             <h3 style="margin-top: 30px;">🔐 메일 서비스별 설정</h3>
-            <div style="background: #fff3cd; border: 1px solid #fbbf24; border-radius: 6px; padding: 12px; font-size: 0.85rem;">
-                <p style="margin: 0 0 8px 0; font-weight: 600;">📧 Gmail 사용시:</p>
-                <ol style="margin: 0 0 12px 16px; padding: 0;">
+            
+            <!-- Gmail 설정 -->
+            <div style="background: #e3f2fd; border: 1px solid #2196f3; border-radius: 6px; padding: 12px; margin-bottom: 12px; font-size: 0.85rem;">
+                <p style="margin: 0 0 8px 0; font-weight: 600; color: #1565c0;">📧 Gmail</p>
+                
+                <div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 8px; margin: 8px 0;">
+                    <p style="margin: 0 0 4px 0; font-weight: 600; color: #495057;">📝 예시:</p>
+                    <p style="margin: 2px 0; font-family: 'Courier New', monospace; background: #e9ecef; padding: 2px 4px; border-radius: 2px;">
+                        이메일: mvptest.kr@gmail.com
+                    </p>
+                    <p style="margin: 2px 0; font-family: 'Courier New', monospace; background: #e9ecef; padding: 2px 4px; border-radius: 2px;">
+                        비밀번호: tyft tvur rkwg uics
+                    </p>
+                </div>
+                
+                <ol style="margin: 0; padding-left: 16px;">
                     <li>Google 계정 관리 접속</li>
                     <li>보안 → 2단계 인증 활성화</li>
                     <li>앱 비밀번호 → 메일 선택</li>
                     <li>16자리 코드 사용</li>
-                    <li>EX)송신자 이메일: mvptest.kr@gmail.com</li>
-                    <li>비밀번호: tyft tvur rkwg uics</li>
                 </ol>
+            </div>
+            
+            <!-- 하이웍스 설정 -->
+            <div style="background: #fff3e0; border: 1px solid #ff9800; border-radius: 6px; padding: 12px; margin-bottom: 12px; font-size: 0.85rem;">
+                <p style="margin: 0 0 8px 0; font-weight: 600; color: #e65100;">🏢 하이웍스 메일</p>
                 
-                <p style="margin: 0 0 8px 0; font-weight: 600;">🏢 하이웍스 메일 사용시:</p>
-                <ol style="margin: 0 0 12px 16px; padding: 0;">
+                <div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 8px; margin: 8px 0;">
+                    <p style="margin: 0 0 4px 0; font-weight: 600; color: #495057;">📝 예시:</p>
+                    <p style="margin: 2px 0; font-family: 'Courier New', monospace; background: #e9ecef; padding: 2px 4px; border-radius: 2px;">
+                        이메일: user@company.hiworks.com
+                    </p>
+                    <p style="margin: 2px 0; font-family: 'Courier New', monospace; background: #e9ecef; padding: 2px 4px; border-radius: 2px;">
+                        비밀번호: 계정비밀번호123!
+                    </p>
+                </div>
+                
+                <ol style="margin: 0; padding-left: 16px;">
                     <li>하이웍스 페이지 접속</li>
                     <li>메일 → 보안 설정</li>
                     <li>SMTP 외부 발송 허용</li>
-                    <li>앱 비밀번호 생성 (있는 경우)</li>
+                    <li>앱 비밀번호 생성 (선택)</li>
                     <li>또는 일반 비밀번호 사용</li>
                 </ol>
-                
-                <p style="margin: 0; font-size: 0.8rem; color: #dc2626; font-weight: 600;">
+            </div>
+            
+            <div style="background: #ffebee; border: 1px solid #f44336; border-radius: 6px; padding: 8px;">
+                <p style="margin: 0; font-size: 0.8rem; color: #c62828; font-weight: 600;">
                     ⚠️ "로그인 실패" 오류 시 관리자에게 SMTP 발송 권한 요청
                 </p>
             </div>
