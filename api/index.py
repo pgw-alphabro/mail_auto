@@ -39,195 +39,378 @@ HTML_TEMPLATE = """
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>메일 자동 발송기</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 1200px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .main-container {
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+            min-height: calc(100vh - 40px);
         }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
+        
         .sidebar {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
         }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
         h1 {
-            color: #333;
+            color: #2d3748;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
+        
+        .sidebar h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-section {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .form-section h3 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
         .form-group {
             margin-bottom: 20px;
         }
+        
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.95rem;
         }
+        
         input[type="text"], textarea, input[type="file"] {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
             font-size: 14px;
-            box-sizing: border-box;
+            transition: all 0.3s ease;
+            background: white;
         }
+        
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
         textarea {
-            height: 200px;
+            height: 180px;
             resize: vertical;
+            font-family: 'Monaco', 'Menlo', monospace;
+            line-height: 1.5;
         }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
         button {
-            background-color: #007bff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 12px 30px;
+            padding: 14px 28px;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 16px;
-            margin: 10px 5px 10px 0;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
+        
         button:hover {
-            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
         }
+        
         .btn-success {
-            background-color: #28a745;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
         }
+        
         .btn-success:hover {
-            background-color: #218838;
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+        }
+        
+        .btn-preview {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+            box-shadow: 0 4px 15px rgba(237, 137, 54, 0.3);
+        }
+        
+        .btn-preview:hover {
+            box-shadow: 0 8px 25px rgba(237, 137, 54, 0.4);
         }
         .info-box {
-            background-color: #e7f3ff;
-            border: 1px solid #b3d9ff;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 20px 0;
+            background: linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%);
+            border: 1px solid #90cdf4;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(144, 205, 244, 0.2);
         }
+        
+        .info-box ul {
+            margin: 10px 0 0 20px;
+        }
+        
+        .info-box li {
+            margin: 8px 0;
+            color: #2d3748;
+        }
+        
         .preview-box {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 20px 0;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
             display: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
+        
+        .preview-box h3 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
         .error {
-            color: #dc3545;
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
+            color: #c53030;
+            background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+            border: 1px solid #fc8181;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: 500;
         }
+        
         .success {
-            color: #155724;
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
+            color: #22543d;
+            background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
+            border: 1px solid #68d391;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: 500;
         }
+        
         .warning {
-            color: #856404;
-            background-color: #fff3cd;
-            border: 1px solid #ffeaa7;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
+            color: #744210;
+            background: linear-gradient(135deg, #fefcbf 0%, #faf089 100%);
+            border: 1px solid #f6e05e;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: 500;
         }
+        
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 10px 0;
+            margin: 15px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
+        
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            border: 1px solid #e2e8f0;
+            padding: 12px 16px;
             text-align: left;
         }
+        
         th {
-            background-color: #f2f2f2;
+            background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
+            font-weight: 600;
+            color: #2d3748;
         }
+        
         .loading {
             display: none;
             text-align: center;
-            padding: 20px;
+            padding: 30px;
+            color: #4a5568;
+            font-size: 1.1rem;
+        }
+        
+        .file-upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: #f7fafc;
+        }
+        
+        .file-upload-area:hover {
+            border-color: #667eea;
+            background: #edf2f7;
+        }
+        
+        .format-table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+        
+        .format-table th {
+            background: #4a5568;
+            color: white;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .sidebar {
+                position: static;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>📧 대량 메일 발송</h1>
-        
-        <div class="info-box">
-            <p>EXCEL 파일을 업로드하면 수신자 정보에 따라 이메일을 자동 발송합니다.</p>
-            <ul>
-                <li><strong>필수값 (꼭 넣어주세요)</strong>: 이름, 이메일</li>
-                <li><strong>선택값</strong>: {일자}, {장소}, {내용}, {상세내용} 등 자유롭게 사용 가능</li>
-            </ul>
-        </div>
-
+    <div class="main-container">
+        <!-- 사이드바 -->
         <div class="sidebar">
-            <h3>📎 첨부파일 (선택사항)</h3>
-            <input type="file" id="attachment" name="attachment">
+            <h3>📎 첨부파일</h3>
+            <div class="form-group">
+                <input type="file" id="attachment" name="attachment">
+                <small style="color: #718096; margin-top: 5px; display: block;">선택사항</small>
+            </div>
             
-            <h3 style="margin-top: 20px;">💡 글꼴 도구 사용하기</h3>
-            <p>아래 문법을 이용해 이메일 본문에 서식을 지정할 수 있습니다.</p>
-            <table>
-                <tr><th>입력 형식</th><th>의미</th></tr>
+            <h3 style="margin-top: 30px;">💡 서식 가이드</h3>
+            <p style="color: #4a5568; margin-bottom: 15px; font-size: 0.9rem;">이메일 본문에 서식을 지정할 수 있습니다:</p>
+            <table class="format-table">
+                <tr><th>입력 형식</th><th>결과</th></tr>
                 <tr><td><code>**텍스트**</code></td><td><strong>굵게</strong></td></tr>
                 <tr><td><code>__텍스트__</code></td><td><u>밑줄</u></td></tr>
                 <tr><td><code>//텍스트//</code></td><td><em>기울임</em></td></tr>
-                <tr><td><code>https://...</code></td><td>하이퍼링크</td></tr>
+                <tr><td><code>https://...</code></td><td>링크</td></tr>
             </table>
+            
+            <button class="btn-success" onclick="downloadSample()" style="width: 100%; margin-top: 25px;">
+                📥 샘플 파일 다운로드
+            </button>
         </div>
 
-        <button class="btn-success" onclick="downloadSample()">📥 샘플 파일 다운로드</button>
+        <!-- 메인 컨텐츠 -->
+        <div class="container">
+            <h1>📧 대량 메일 발송</h1>
+            
+            <div class="info-box">
+                <h3 style="margin-bottom: 15px; color: #2b6cb0;">📋 사용 방법</h3>
+                <p style="margin-bottom: 10px;">EXCEL 파일을 업로드하면 수신자 정보에 따라 이메일을 자동 발송합니다.</p>
+                <ul>
+                    <li><strong>필수값</strong>: 이름, 이메일</li>
+                    <li><strong>선택값</strong>: {일자}, {장소}, {내용}, {상세내용} 등 자유롭게 사용 가능</li>
+                </ul>
+            </div>
 
-        <div class="form-group">
-            <label for="excel_file">📁 파일 업로드</label>
-            <input type="file" id="excel_file" accept=".xlsx,.xls" onchange="handleFileUpload()">
-        </div>
+            <div class="form-section">
+                <h3>📁 파일 업로드</h3>
+                <div class="file-upload-area">
+                    <input type="file" id="excel_file" accept=".xlsx,.xls" onchange="handleFileUpload()" style="margin-bottom: 10px;">
+                    <p style="color: #718096; font-size: 0.9rem;">Excel 파일(.xlsx, .xls)을 선택해주세요</p>
+                </div>
+                <div id="file-preview"></div>
+            </div>
 
-        <div id="file-preview"></div>
+            <div class="form-section">
+                <h3>✏️ 이메일 작성</h3>
+                <div class="form-group">
+                    <label for="subject">제목</label>
+                    <input type="text" id="subject" placeholder="이메일 제목을 입력해주세요" value="제목">
+                </div>
 
-        <div class="form-group">
-            <label for="subject">✏️ 이메일 제목 및 본문 템플릿</label>
-            <input type="text" id="subject" placeholder="제목을 입력해주세요" value="제목">
-        </div>
-
-        <div class="form-group">
-            <label for="body">이메일 본문</label>
-            <textarea id="body" placeholder="이메일 본문을 입력하세요">안녕하세요 {이름}님,
+                <div class="form-group">
+                    <label for="body">본문</label>
+                    <textarea id="body" placeholder="이메일 본문을 입력하세요...">안녕하세요 {이름}님,
 제출하신 서류를 검토한 결과 아래 항목에 대해 보완이 필요합니다.
 
 ▶ 내용: {내용}
 ▶ 상세 내용: {상세내용}
 
 감사합니다.</textarea>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-preview" onclick="previewEmail()">🔍 미리보기</button>
+                    <button onclick="sendEmails()">📨 이메일 발송</button>
+                </div>
+            </div>
+
+            <div id="preview" class="preview-box">
+                <h3>🔍 이메일 미리보기 (첫 번째 수신자 기준)</h3>
+                <div id="preview-content"></div>
+            </div>
+
+            <div class="loading" id="loading">
+                <p>📨 이메일을 발송 중입니다...</p>
+            </div>
+
+            <div id="result"></div>
         </div>
-
-        <button onclick="previewEmail()">🔍 이메일 미리보기</button>
-        <button onclick="sendEmails()">📨 이메일 보내기</button>
-
-        <div id="preview" class="preview-box">
-            <h3>🔍 이메일 미리보기 (첫 번째 수신자 기준)</h3>
-            <div id="preview-content"></div>
-        </div>
-
-        <div class="loading" id="loading">
-            <p>📨 이메일을 발송 중입니다...</p>
-        </div>
-
-        <div id="result"></div>
-    </div>
+    </div></body>
 
     <script>
         let uploadedData = null;
