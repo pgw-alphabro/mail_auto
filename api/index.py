@@ -130,7 +130,7 @@ HTML_TEMPLATE = """
             font-size: 0.95rem;
         }
         
-        input[type="text"], textarea, input[type="file"] {
+        input[type="text"], input[type="email"], input[type="password"], textarea, input[type="file"] {
             width: 100%;
             padding: 10px 12px;
             border: 1px solid #d0d7de;
@@ -140,7 +140,7 @@ HTML_TEMPLATE = """
             background: white;
         }
         
-        input[type="text"]:focus, textarea:focus {
+        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, textarea:focus {
             outline: none;
             border-color: #0969da;
             box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.1);
@@ -344,6 +344,17 @@ HTML_TEMPLATE = """
             <button class="btn-success" onclick="downloadSample()" style="width: 100%; margin-top: 25px;">
                 📥 샘플 파일 다운로드
             </button>
+            
+            <h3 style="margin-top: 30px;">🔐 앱 비밀번호 생성</h3>
+            <div style="background: #fff3cd; border: 1px solid #fbbf24; border-radius: 6px; padding: 12px; font-size: 0.85rem;">
+                <p style="margin: 0 0 8px 0; font-weight: 600;">Gmail 앱 비밀번호 생성 방법:</p>
+                <ol style="margin: 0; padding-left: 16px;">
+                    <li>Google 계정 관리 접속</li>
+                    <li>보안 → 2단계 인증 활성화</li>
+                    <li>앱 비밀번호 → 메일 선택</li>
+                    <li>16자리 코드 복사</li>
+                </ol>
+            </div>
         </div>
 
         <!-- 메인 컨텐츠 -->
@@ -366,6 +377,21 @@ HTML_TEMPLATE = """
                     <p style="color: #718096; font-size: 0.9rem;">Excel 파일(.xlsx, .xls)을 선택해주세요</p>
                 </div>
                 <div id="file-preview"></div>
+            </div>
+
+            <div class="form-section">
+                <h3>👤 송신자 계정</h3>
+                <div class="form-group">
+                    <label for="sender_email">송신자 이메일</label>
+                    <input type="email" id="sender_email" placeholder="example@gmail.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="sender_password">앱 비밀번호</label>
+                    <input type="password" id="sender_password" placeholder="Gmail 앱 비밀번호 (16자리)" required>
+                    <small style="color: #6b7280; margin-top: 5px; display: block;">
+                        💡 Gmail 2단계 인증 → 앱 비밀번호에서 생성 (예: abcd efgh ijkl mnop)
+                    </small>
+                </div>
             </div>
 
             <div class="form-section">
@@ -506,11 +532,20 @@ HTML_TEMPLATE = """
                 return;
             }
 
+            const senderEmail = document.getElementById('sender_email').value;
+            const senderPassword = document.getElementById('sender_password').value;
             const subject = document.getElementById('subject').value;
             const body = document.getElementById('body').value;
             const attachmentFile = document.getElementById('attachment').files[0];
 
+            if (!senderEmail || !senderPassword) {
+                alert('송신자 이메일과 앱 비밀번호를 입력해주세요.');
+                return;
+            }
+
             const formData = new FormData();
+            formData.append('sender_email', senderEmail);
+            formData.append('sender_password', senderPassword);
             formData.append('subject', subject);
             formData.append('body', body);
             formData.append('data', JSON.stringify(uploadedData));
@@ -611,6 +646,9 @@ def preview_email():
 @app.route('/api/send', methods=['POST'])
 def send_emails():
     try:
+        # 사용자 입력 받기
+        sender_email = request.form.get('sender_email', '')
+        sender_password = request.form.get('sender_password', '')
         subject_template = request.form.get('subject', '')
         body_template = convert_to_html(request.form.get('body', ''))
         records = eval(request.form.get('data', '[]'))  # JSON 파싱
@@ -618,9 +656,12 @@ def send_emails():
         if not records:
             return jsonify({'success': False, 'error': '데이터가 없습니다.'})
         
-        # 이메일 설정 (기존 mail_sender.py와 동일)
-        sender_email = 'mvptest.kr@gmail.com'
-        sender_password = 'tyft tvur rkwg uics'
+        if not sender_email or not sender_password:
+            return jsonify({'success': False, 'error': '송신자 이메일과 앱 비밀번호를 입력해주세요.'})
+        
+        # 이메일 유효성 검사
+        if '@' not in sender_email:
+            return jsonify({'success': False, 'error': '올바른 이메일 주소를 입력해주세요.'})
         
         # SMTP 서버 연결
         smtp_server = 'smtp.gmail.com'
