@@ -376,10 +376,10 @@ HTML_TEMPLATE = """
                 <div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 8px; margin: 8px 0;">
                     <p style="margin: 0 0 4px 0; font-weight: 600; color: #495057;">📝 예시:</p>
                     <p style="margin: 2px 0; font-family: 'Courier New', monospace; background: #e9ecef; padding: 2px 4px; border-radius: 2px;">
-                        이메일: user@company.hiworks.com
+                        이메일: user@alphabrothers.co.kr
                     </p>
                     <p style="margin: 2px 0; font-family: 'Courier New', monospace; background: #e9ecef; padding: 2px 4px; border-radius: 2px;">
-                        비밀번호: 계정비밀번호123!
+                        비밀번호: 메일 전용 비밀번호 or 계정비밀번호
                     </p>
                 </div>
                 
@@ -387,7 +387,7 @@ HTML_TEMPLATE = """
                     <li>하이웍스 페이지 접속</li>
                     <li>메일 → 보안 설정</li>
                     <li>SMTP 외부 발송 허용</li>
-                    <li>앱 비밀번호 생성 (선택)</li>
+                    <li>메일 전용 비밀번호 생성 (선택)</li>
                     <li>또는 일반 비밀번호 사용</li>
                 </ol>
             </div>
